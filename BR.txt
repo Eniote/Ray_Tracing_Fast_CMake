@@ -1,0 +1,15 @@
+cmake -B out\build
+cmake --build out\build
+out\build\Debug\Ray_Tracing_Fast_CMake > image.ppm
+explorer.exe .
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public class Win32 {
+   [DllImport("User32.dll")]
+   public static extern bool SetForegroundWindow(IntPtr hWnd);
+}
+"@
+
+$hwnd = (Get-Process | Where-Object { $_.MainWindowTitle -like "*Ray_Tracing_Fast_CMake*" }).MainWindowHandle
+[void] [Win32]::SetForegroundWindow($hwnd)
