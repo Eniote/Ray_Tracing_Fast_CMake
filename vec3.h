@@ -54,7 +54,6 @@ public:
 		return std::sqrt(length_squered());
 	}
 
-private:
 	double length_squered() const {
 		return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
 	}
