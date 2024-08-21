@@ -12,7 +12,7 @@ endif()
 project ("Ray_Tracing_Fast_CMake")
 
 # Adicione a origem ao executável deste projeto.
-add_executable (Ray_Tracing_Fast_CMake "Ray_Tracing_Fast_CMake.cpp" "Ray_Tracing_Fast_CMake.h" "vec3.h" "color.h" "ray.h" "back up main 1.cpp")
+add_executable (Ray_Tracing_Fast_CMake "Ray_Tracing_Fast_CMake.cpp" "Ray_Tracing_Fast_CMake.h" "vec3.h" "color.h" "ray.h" "back up main 1.cpp" "hittable.h" "sphere.h" "hittable_list.h" "rtweekend.h" "interval.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Ray_Tracing_Fast_CMake PROPERTY CXX_STANDARD 20)
