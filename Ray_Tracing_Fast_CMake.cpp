@@ -1,6 +1,7 @@
 ﻿
 #include "rtweekend.h"
 
+#include "camera.h"
 #include "hittable.h"
 #include "hittable_list.h"
 #include "sphere.h"
@@ -11,68 +12,18 @@ using namespace std;
 // use type BR.txt|cmd
 
 
-
-color ray_color(const ray& r, const hittable& world) {
-    hit_record rec;
-    if (world.hit(r, interval(0, infinity), rec)) {
-        return 0.5 * (rec.normal + color(1, 1, 1));
-    }
-
-    vec3 unit_direction = unit_vector(r.direction());
-    auto a = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - a) * color(1.0, 1.0, 1.0) + a * color(0.5, 0.7, 1.0);
-}
-
 int main() {
-    auto aspect_ratio = 14/16.0;
-    int img_w = 350;
-
-    //Calcula img h
-    int img_h = int(img_w / aspect_ratio);
-    img_h = (img_h < 1) ? 1 : img_h;
-
-    
-    // World
     hittable_list world;
 
-    world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
     world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
+    world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
 
+    camera cam;
 
-    //Camera
-    auto focal_length = 1.0; // A distancia entre a camera e o plano de progeção
-    auto veiwp_h = 2.0;
-    auto veiwp_w = veiwp_h * (double(img_w) / img_h);
-    auto camera_center = point3(0, 0, 0);
+    cam.aspect_ratio = 14.6 / 16;
+    cam.img_w = 350;
 
-    // vetores horizontais e verticais
-    auto veiwp_u = vec3(veiwp_w, 0, 0);
-    auto veiwp_v = vec3(0, -veiwp_h, 0);
-
-    //-------------
-    auto pix_du = veiwp_u / img_w;
-    auto pix_dv = veiwp_v / img_h;
-
-
-    //----------------
-    auto veiwp_upper_left = camera_center - vec3(0, 0, focal_length) - veiwp_u / 2 - veiwp_v / 2;
-    auto pixel00_loc = veiwp_upper_left + 0.5 * (pix_du + pix_dv);
-
-    cout << "P3\n" << img_w << ' ' << img_h << "\n255\n";
-
-    for (int j = 0; j < img_h; j++) {
-        clog << "\rScanlines Remaining: " << (img_h - j) << ' ' << flush;
-        for (int i = 0; i < img_w; i++) {
-            auto pixel_center = pixel00_loc + (i * pix_du) + (j * pix_dv);
-            auto ray_direction = pixel_center - camera_center;
-            ray r(camera_center, ray_direction);
-
-            color pix_color = ray_color(r, world);
-            write_color(std::cout, pix_color);
-        }
-    };
-
-    clog << "\rDone.                \n";
+    cam.render(world);
 
     return 0;
 }
